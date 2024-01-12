@@ -47,24 +47,24 @@ def crawl_news():
         try:
             response = requests.get(url)
             soup = BeautifulSoup(response.text, 'html.parser')
-            # article_id = str(uuid.uuid4())
-            # title = soup.h1.text.strip()
-            # time = soup.find('span', class_='date').text.strip()
+            article_id = str(uuid.uuid4())
+            title = soup.h1.text.strip()
+            time = soup.find('span', class_='date').text.strip()
 
-            # time = time.split(',')[1].strip()
-            # year = time.split('/')[2]
-            # month = time.split('/')[1]
-            # day = time.split('/')[0]
-            # year = int(year)
-            # month = int(month)
-            # day = int(day)
+            time = time.split(',')[1].strip()
+            year = time.split('/')[2]
+            month = time.split('/')[1]
+            day = time.split('/')[0]
+            year = int(year)
+            month = int(month)
+            day = int(day)
 
-            # description_tag = soup.find('p', class_='description')
+            description_tag = soup.find('p', class_='description')
 
-            # if description_tag.span:
-            #     description_tag.span.decompose()
+            if description_tag.span:
+                description_tag.span.decompose()
 
-            # description = description_tag.text.strip()
+            description = description_tag.text.strip()
             # content = soup.find('article', class_='fck_detail').text.strip()
             # picture = soup.find('div', class_='fig-picture')
             # try:
@@ -93,7 +93,7 @@ def crawl_news():
             # print('Done: ', url)
         except:
             print('Error: ', url)
-        return soup
+        return title + time + description
         break
 
     # drop row with empty image_path
