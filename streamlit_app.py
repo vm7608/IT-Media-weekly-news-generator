@@ -20,11 +20,13 @@ warnings.filterwarnings("ignore")
 
 
 def crawl_news():
+    
+    headers = {'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
     if os.path.exists(SAVE_POST_IMG_DIR):
         shutil.rmtree(SAVE_POST_IMG_DIR)
     os.makedirs(SAVE_POST_IMG_DIR, exist_ok=True)
 
-    response = requests.get(VNEXPRESS)
+    response = requests.get(VNEXPRESS, headers=headers)
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -41,7 +43,7 @@ def crawl_news():
     list_url = list_url[:15]
     for url in list_url:
         try:
-            response = requests.get(url)
+            response = requests.get(url, headers=headers)
             soup = BeautifulSoup(response.text, 'html.parser')
             article_id = str(uuid.uuid4())
             title = soup.h1.text.strip()
@@ -65,7 +67,7 @@ def crawl_news():
             picture = soup.find('div', class_='fig-picture')
             try:
                 image_url = picture.img['data-src']
-                response = requests.get(image_url)
+                response = requests.get(image_url, headers=headers)
                 image_path = SAVE_POST_IMG_DIR + '/' + article_id + '.jpg'
                 with open(image_path, 'wb') as f:
                     f.write(response.content)
