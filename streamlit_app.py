@@ -21,7 +21,11 @@ warnings.filterwarnings("ignore")
 
 def crawl_news():
     
-    headers = {'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+    headers = {'Accept': '*/*',
+                'Accept-Encoding': 'identity, deflate, compress, gzip',
+                'Authorization': u'Basic dXNlcjpwYXNz',
+                'User-Agent': 'python-requests/0.12.1'}
+    
     if os.path.exists(SAVE_POST_IMG_DIR):
         shutil.rmtree(SAVE_POST_IMG_DIR)
     os.makedirs(SAVE_POST_IMG_DIR, exist_ok=True)
