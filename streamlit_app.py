@@ -340,7 +340,7 @@ def main():
     
         with placeholder.container():
             # st.dataframe(data)
-            st.markdown(data, unsafe_allow_html=True)
+            st.markdown(data)
             # for index, row in data.iterrows():
             #     # get the title and description
             #     title = row['title']
