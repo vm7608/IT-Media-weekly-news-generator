@@ -334,9 +334,9 @@ def main():
 
                 # save the result
                 cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
-
+    
         with placeholder.container():
-            st.title("Generated news")
+            st.title(str(len(os.listdir(RESULTS_DIR))) + " news generated")
             for index, row in data.iterrows():
                 # get the title and description
                 title = row['title']
@@ -344,7 +344,7 @@ def main():
                 time = row['time']
                 url = row['url']
 
-                rs_img = cv2.imread(f'{RESULTS_DIR}/{index}.png')
+                # rs_img = cv2.imread(f'{RESULTS_DIR}/{index}.png')
 
                 itm_content = (
                     title.upper()
@@ -367,7 +367,7 @@ def main():
                 st.text(time)
                 st.markdown(itm_content, unsafe_allow_html=True)
 
-                st.image(rs_img, use_column_width=True, channels="BGR")
+                # st.image(rs_img, use_column_width=True, channels="BGR")
 
                 # create a button to download the image
                 download_button_str = download_button(
