@@ -315,29 +315,28 @@ def main():
 
         bgr_img_path = f"{BGR_DIR}/{background.lower().replace(' ', '')}.png"
 
-        with st.spinner("Generating news..."):
-            data = crawl_news()
-            for index, row in data.iterrows():
-                # get the title and description
-                title = row['title']
-                description = row['description']
-                time = row['time']
+        # with st.spinner("Generating news..."):
+        data = crawl_news()
+        for index, row in data.iterrows():
+            # get the title and description
+            title = row['title']
+            description = row['description']
+            time = row['time']
 
-                # get the info image path
-                img_path = row['image_path']
-                info_img = cv2.imread(img_path)
+            # get the info image path
+            img_path = row['image_path']
+            info_img = cv2.imread(img_path)
 
-                # read template image
-                bgr_img = cv2.imread(bgr_img_path)
-                merged_img = merge_info_img(bgr_img, info_img)
-                merged_img = merge_text(title, description, merged_img)
+            # read template image
+            bgr_img = cv2.imread(bgr_img_path)
+            merged_img = merge_info_img(bgr_img, info_img)
+            merged_img = merge_text(title, description, merged_img)
 
-                # save the result
-                cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
+            # save the result
+            cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
     
         with placeholder.container():
-            st.title(str(len(os.listdir(RESULTS_DIR))) + " news generated")
-            st.title(str(len(os.listdir(SAVE_POST_IMG_DIR))) + " news generated")
+            st.dataframe(data)
             for index, row in data.iterrows():
                 # get the title and description
                 title = row['title']
