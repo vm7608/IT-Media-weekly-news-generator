@@ -37,62 +37,66 @@ def crawl_news():
         list_url.append(article_url)
     list_url = list(set(list_url))
 
-    # df = pd.DataFrame(
-    #     columns=['id', 'title', 'url', 'time', 'description', 'content', 'image_path']
-    # )
-    # list_url = list_url[:15]
-    # for url in list_url:
-    #     try:
-    #         response = requests.get(url)
-    #         soup = BeautifulSoup(response.text, 'html.parser')
-    #         article_id = str(uuid.uuid4())
-    #         title = soup.h1.text.strip()
-    #         time = soup.find('span', class_='date').text.strip()
 
-    #         time = time.split(',')[1].strip()
-    #         year = time.split('/')[2]
-    #         month = time.split('/')[1]
-    #         day = time.split('/')[0]
-    #         year = int(year)
-    #         month = int(month)
-    #         day = int(day)
+    # ---- ở trên oke
+    df = pd.DataFrame(
+        columns=['id', 'title', 'url', 'time', 'description', 'content', 'image_path']
+    )
+    list_url = list_url[:15]
+    for url in list_url:
+        try:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            # article_id = str(uuid.uuid4())
+            # title = soup.h1.text.strip()
+            # time = soup.find('span', class_='date').text.strip()
 
-    #         description_tag = soup.find('p', class_='description')
+            # time = time.split(',')[1].strip()
+            # year = time.split('/')[2]
+            # month = time.split('/')[1]
+            # day = time.split('/')[0]
+            # year = int(year)
+            # month = int(month)
+            # day = int(day)
 
-    #         if description_tag.span:
-    #             description_tag.span.decompose()
+            # description_tag = soup.find('p', class_='description')
 
-    #         description = description_tag.text.strip()
-    #         content = soup.find('article', class_='fck_detail').text.strip()
-    #         picture = soup.find('div', class_='fig-picture')
-    #         try:
-    #             image_url = picture.img['data-src']
-    #             response = requests.get(image_url)
-    #             image_path = SAVE_POST_IMG_DIR + '/' + article_id + '.jpg'
-    #             with open(image_path, 'wb') as f:
-    #                 f.write(response.content)
+            # if description_tag.span:
+            #     description_tag.span.decompose()
 
-    #         except:
-    #             image_path = None
+            # description = description_tag.text.strip()
+            # content = soup.find('article', class_='fck_detail').text.strip()
+            # picture = soup.find('div', class_='fig-picture')
+            # try:
+            #     image_url = picture.img['data-src']
+            #     response = requests.get(image_url)
+            #     image_path = SAVE_POST_IMG_DIR + '/' + article_id + '.jpg'
+            #     with open(image_path, 'wb') as f:
+            #         f.write(response.content)
 
-    #         row = {
-    #             'id': article_id,
-    #             'title': title,
-    #             'url': url,
-    #             'time': time,
-    #             'year': year,
-    #             'month': month,
-    #             'day': day,
-    #             'description': description,
-    #             'content': content,
-    #             'image_path': image_path,
-    #         }
-    #         df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-    #         print('Done: ', url)
-    #     except:
-    #         print('Error: ', url)
+            # except:
+            #     image_path = None
 
-    # # drop row with empty image_path
+            # row = {
+            #     'id': article_id,
+            #     'title': title,
+            #     'url': url,
+            #     'time': time,
+            #     'year': year,
+            #     'month': month,
+            #     'day': day,
+            #     'description': description,
+            #     'content': content,
+            #     'image_path': image_path,
+            # }
+            # df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+            # print('Done: ', url)
+        except:
+            print('Error: ', url)
+        return soup
+        break
+
+    # drop row with empty image_path
     # df = df.dropna(subset=['image_path'])
 
     # # save dataframe to csv file
@@ -102,7 +106,6 @@ def crawl_news():
     # df = df.sort_values(by=['year', 'month', 'day'], ascending=False)
     # df = df[:10]
     # return df
-    return list_url
 
 
 def resize_image(img):
