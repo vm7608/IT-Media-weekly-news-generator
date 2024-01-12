@@ -31,77 +31,78 @@ def crawl_news():
     soup = BeautifulSoup(response.text, 'html.parser')
 
     articles = soup.find_all('article', class_='item-news item-news-common thumb-left')
-    list_url = []
-    for article in articles:
-        article_url = article.h2.a['href']
-        list_url.append(article_url)
-    list_url = list(set(list_url))
+    # list_url = []
+    # for article in articles:
+    #     article_url = article.h2.a['href']
+    #     list_url.append(article_url)
+    # list_url = list(set(list_url))
 
-    df = pd.DataFrame(
-        columns=['id', 'title', 'url', 'time', 'description', 'content', 'image_path']
-    )
-    list_url = list_url[:15]
-    for url in list_url:
-        try:
-            response = requests.get(url)
-            soup = BeautifulSoup(response.text, 'html.parser')
-            article_id = str(uuid.uuid4())
-            title = soup.h1.text.strip()
-            time = soup.find('span', class_='date').text.strip()
+    # df = pd.DataFrame(
+    #     columns=['id', 'title', 'url', 'time', 'description', 'content', 'image_path']
+    # )
+    # list_url = list_url[:15]
+    # for url in list_url:
+    #     try:
+    #         response = requests.get(url)
+    #         soup = BeautifulSoup(response.text, 'html.parser')
+    #         article_id = str(uuid.uuid4())
+    #         title = soup.h1.text.strip()
+    #         time = soup.find('span', class_='date').text.strip()
 
-            time = time.split(',')[1].strip()
-            year = time.split('/')[2]
-            month = time.split('/')[1]
-            day = time.split('/')[0]
-            year = int(year)
-            month = int(month)
-            day = int(day)
+    #         time = time.split(',')[1].strip()
+    #         year = time.split('/')[2]
+    #         month = time.split('/')[1]
+    #         day = time.split('/')[0]
+    #         year = int(year)
+    #         month = int(month)
+    #         day = int(day)
 
-            description_tag = soup.find('p', class_='description')
+    #         description_tag = soup.find('p', class_='description')
 
-            if description_tag.span:
-                description_tag.span.decompose()
+    #         if description_tag.span:
+    #             description_tag.span.decompose()
 
-            description = description_tag.text.strip()
-            content = soup.find('article', class_='fck_detail').text.strip()
-            picture = soup.find('div', class_='fig-picture')
-            try:
-                image_url = picture.img['data-src']
-                response = requests.get(image_url)
-                image_path = SAVE_POST_IMG_DIR + '/' + article_id + '.jpg'
-                with open(image_path, 'wb') as f:
-                    f.write(response.content)
+    #         description = description_tag.text.strip()
+    #         content = soup.find('article', class_='fck_detail').text.strip()
+    #         picture = soup.find('div', class_='fig-picture')
+    #         try:
+    #             image_url = picture.img['data-src']
+    #             response = requests.get(image_url)
+    #             image_path = SAVE_POST_IMG_DIR + '/' + article_id + '.jpg'
+    #             with open(image_path, 'wb') as f:
+    #                 f.write(response.content)
 
-            except:
-                image_path = None
+    #         except:
+    #             image_path = None
 
-            row = {
-                'id': article_id,
-                'title': title,
-                'url': url,
-                'time': time,
-                'year': year,
-                'month': month,
-                'day': day,
-                'description': description,
-                'content': content,
-                'image_path': image_path,
-            }
-            df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-            print('Done: ', url)
-        except:
-            print('Error: ', url)
+    #         row = {
+    #             'id': article_id,
+    #             'title': title,
+    #             'url': url,
+    #             'time': time,
+    #             'year': year,
+    #             'month': month,
+    #             'day': day,
+    #             'description': description,
+    #             'content': content,
+    #             'image_path': image_path,
+    #         }
+    #         df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+    #         print('Done: ', url)
+    #     except:
+    #         print('Error: ', url)
 
-    # drop row with empty image_path
-    df = df.dropna(subset=['image_path'])
+    # # drop row with empty image_path
+    # df = df.dropna(subset=['image_path'])
 
-    # save dataframe to csv file
-    # df.to_csv('data/data.csv', index=False)
+    # # save dataframe to csv file
+    # # df.to_csv('data/data.csv', index=False)
 
-    # sort and get the ten latest news
-    df = df.sort_values(by=['year', 'month', 'day'], ascending=False)
-    df = df[:10]
-    return df
+    # # sort and get the ten latest news
+    # df = df.sort_values(by=['year', 'month', 'day'], ascending=False)
+    # df = df[:10]
+    # return df
+    return articles
 
 
 def resize_image(img):
@@ -319,68 +320,69 @@ def main():
 
         with st.spinner("Generating news..."):
             data = crawl_news()
-            for index, row in data.iterrows():
-                # get the title and description
-                title = row['title']
-                description = row['description']
-                time = row['time']
+            # for index, row in data.iterrows():
+            #     # get the title and description
+            #     title = row['title']
+            #     description = row['description']
+            #     time = row['time']
 
-                # get the info image path
-                img_path = row['image_path']
-                info_img = cv2.imread(img_path)
+            #     # get the info image path
+            #     img_path = row['image_path']
+            #     info_img = cv2.imread(img_path)
 
-                # read template image
-                bgr_img = cv2.imread(bgr_img_path)
-                merged_img = merge_info_img(bgr_img, info_img)
-                merged_img = merge_text(title, description, merged_img)
+            #     # read template image
+            #     bgr_img = cv2.imread(bgr_img_path)
+            #     merged_img = merge_info_img(bgr_img, info_img)
+            #     merged_img = merge_text(title, description, merged_img)
 
-                # save the result
-                cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
+            #     # save the result
+            #     cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
     
         with placeholder.container():
             st.dataframe(data)
-            for index, row in data.iterrows():
-                # get the title and description
-                title = row['title']
-                description = row['description']
-                time = row['time']
-                url = row['url']
+            st.markdown(data, unsafe_allow_html=True)
+            # for index, row in data.iterrows():
+            #     # get the title and description
+            #     title = row['title']
+            #     description = row['description']
+            #     time = row['time']
+            #     url = row['url']
 
-                # rs_img = cv2.imread(f'{RESULTS_DIR}/{index}.png')
+            #     # rs_img = cv2.imread(f'{RESULTS_DIR}/{index}.png')
 
-                itm_content = (
-                    title.upper()
-                    + '<br>'
-                    + '<br>'
-                    + description
-                    + '<br>'
-                    + 'Nguồn VnExpress: '
-                    + url
-                    + '<br>'
-                    + "-----"
-                    + '<br>'
-                    + "#ITMedia"
-                    + '<br>'
-                    + "#ITMNews"
-                    + '<br>'
-                    + "#ITMNewsGenerator"
-                )
-                st.title(title)
-                st.text(time)
-                st.markdown(itm_content, unsafe_allow_html=True)
+            #     itm_content = (
+            #         title.upper()
+            #         + '<br>'
+            #         + '<br>'
+            #         + description
+            #         + '<br>'
+            #         + 'Nguồn VnExpress: '
+            #         + url
+            #         + '<br>'
+            #         + "-----"
+            #         + '<br>'
+            #         + "#ITMedia"
+            #         + '<br>'
+            #         + "#ITMNews"
+            #         + '<br>'
+            #         + "#ITMNewsGenerator"
+            #     )
+            #     st.title(title)
+            #     st.text(time)
+            #     st.markdown(itm_content, unsafe_allow_html=True)
 
-                # st.image(rs_img, use_column_width=True, channels="BGR")
+            #     # st.image(rs_img, use_column_width=True, channels="BGR")
 
-                # create a button to download the image
-                download_button_str = download_button(
-                    open(f'{RESULTS_DIR}/{index}.png', 'rb').read(),
-                    f'{index}.png',
-                    'Download image',
-                )
-                st.markdown(download_button_str, unsafe_allow_html=True)
+            #     # create a button to download the image
+            #     download_button_str = download_button(
+            #         open(f'{RESULTS_DIR}/{index}.png', 'rb').read(),
+            #         f'{index}.png',
+            #         'Download image',
+            #     )
+            #     st.markdown(download_button_str, unsafe_allow_html=True)
 
-                # create a break line
-                st.markdown("<br>", unsafe_allow_html=True)
+            #     # create a break line
+            #     st.markdown("<br>", unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
