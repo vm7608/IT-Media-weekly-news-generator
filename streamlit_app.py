@@ -336,6 +336,7 @@ def main():
                 cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
 
         with placeholder.container():
+            st.title("Generated news")
             for index, row in data.iterrows():
                 # get the title and description
                 title = row['title']
