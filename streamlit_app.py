@@ -31,11 +31,11 @@ def crawl_news():
     soup = BeautifulSoup(response.text, 'html.parser')
 
     articles = soup.find_all('article', class_='item-news item-news-common thumb-left')
-    # list_url = []
-    # for article in articles:
-    #     article_url = article.h2.a['href']
-    #     list_url.append(article_url)
-    # list_url = list(set(list_url))
+    list_url = []
+    for article in articles:
+        article_url = article.h2.a['href']
+        list_url.append(article_url)
+    list_url = list(set(list_url))
 
     # df = pd.DataFrame(
     #     columns=['id', 'title', 'url', 'time', 'description', 'content', 'image_path']
@@ -102,7 +102,7 @@ def crawl_news():
     # df = df.sort_values(by=['year', 'month', 'day'], ascending=False)
     # df = df[:10]
     # return df
-    return articles
+    return list_url
 
 
 def resize_image(img):
