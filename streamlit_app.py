@@ -66,16 +66,16 @@ def crawl_news():
 
             description = description_tag.text.strip()
             # content = soup.find('article', class_='fck_detail').text.strip()
-            # picture = soup.find('div', class_='fig-picture')
-            # try:
-            #     image_url = picture.img['data-src']
-            #     response = requests.get(image_url)
-            #     image_path = SAVE_POST_IMG_DIR + '/' + article_id + '.jpg'
-            #     with open(image_path, 'wb') as f:
-            #         f.write(response.content)
+            picture = soup.find('div', class_='fig-picture')
+            try:
+                image_url = picture.img['data-src']
+                response = requests.get(image_url)
+                image_path = SAVE_POST_IMG_DIR + '/' + article_id + '.jpg'
+                with open(image_path, 'wb') as f:
+                    f.write(response.content)
 
-            # except:
-            #     image_path = None
+            except:
+                image_path = None
 
             # row = {
             #     'id': article_id,
@@ -93,7 +93,7 @@ def crawl_news():
             # print('Done: ', url)
         except:
             print('Error: ', url)
-        return title + time + description
+        return title + time + description + image_path
         break
 
     # drop row with empty image_path
