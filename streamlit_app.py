@@ -68,7 +68,7 @@ def crawl_news():
             # content = soup.find('article', class_='fck_detail').text.strip()
             picture = soup.find('div', class_='fig-picture')
             try:
-                image_url = picture.img['data-src']
+                image_url = picture.img['src']
                 response = requests.get(image_url)
                 image_path = SAVE_POST_IMG_DIR + '/' + article_id + '.jpg'
                 with open(image_path, 'wb') as f:
@@ -93,7 +93,7 @@ def crawl_news():
             # print('Done: ', url)
         except:
             print('Error: ', url)
-        return picture
+        return image_path
         break
 
     # drop row with empty image_path
