@@ -339,7 +339,7 @@ def main():
             #     cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
     
         with placeholder.container():
-            st.dataframe(data)
+            # st.dataframe(data)
             st.markdown(data, unsafe_allow_html=True)
             # for index, row in data.iterrows():
             #     # get the title and description
