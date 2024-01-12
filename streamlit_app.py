@@ -337,6 +337,7 @@ def main():
     
         with placeholder.container():
             st.title(str(len(os.listdir(RESULTS_DIR))) + " news generated")
+            st.title(str(len(os.listdir(SAVE_POST_IMG_DIR))) + " news generated")
             for index, row in data.iterrows():
                 # get the title and description
                 title = row['title']
