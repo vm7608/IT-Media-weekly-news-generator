@@ -93,7 +93,7 @@ def crawl_news():
             # print('Done: ', url)
         except:
             print('Error: ', url)
-        return image_path
+        return image_url
         break
 
     # drop row with empty image_path
