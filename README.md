@@ -1,0 +1,1 @@
+# IT-Media-weekly-news-generator
