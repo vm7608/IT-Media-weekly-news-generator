@@ -277,9 +277,7 @@ def download_button(
 
 
 def main():
-    st.beta_set_page_title("ITM News Generator")
     placeholder = st.empty()
-
     with placeholder.container():
         for i in range(1, 6):
             st.title(f"Background {i}")
