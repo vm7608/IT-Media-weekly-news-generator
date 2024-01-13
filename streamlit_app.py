@@ -277,6 +277,7 @@ def download_button(
 
 
 def main():
+    st.beta_set_page_title("ITM News Generator")
     placeholder = st.empty()
 
     with placeholder.container():
@@ -286,7 +287,7 @@ def main():
             st.image(background_img, use_column_width=True, channels="BGR")
 
     st.sidebar.title("ITM News Generator")
-    st.sidebar.text("(v1.0.0)")
+    st.sidebar.text("(v1.0.1)")
     background = st.sidebar.radio(
         "Select a background",
         [
