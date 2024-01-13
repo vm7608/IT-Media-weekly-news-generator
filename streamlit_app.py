@@ -96,7 +96,7 @@ def crawl_news():
 
     # sort and get the ten latest news
     df = df.sort_values(by=['year', 'month', 'day'], ascending=False)
-    df = df[: min(15, len(df))]
+    df = df[: min(10, len(df))]
     return df
 
 
