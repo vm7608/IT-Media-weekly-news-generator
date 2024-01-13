@@ -372,7 +372,7 @@ def main():
 
                 # create a button to download the image
                 download_button_str = download_button(
-                    open(f'{RESULTS_DIR}/{index}.png', 'rb').read(),
+                    open(img_path, 'rb').read(),
                     f'{index}.png',
                     'Download image',
                 )
