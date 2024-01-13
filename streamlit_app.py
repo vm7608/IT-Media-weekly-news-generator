@@ -39,7 +39,7 @@ def crawl_news():
     df = pd.DataFrame(
         columns=['id', 'title', 'url', 'time', 'description', 'content', 'image_path']
     )
-    list_url = list_url[:15]
+    # list_url = list_url[:15]
     for url in list_url:
         try:
             response = requests.get(url)
@@ -96,7 +96,7 @@ def crawl_news():
 
     # sort and get the ten latest news
     df = df.sort_values(by=['year', 'month', 'day'], ascending=False)
-    df = df[: min(10, len(df))]
+    df = df[: min(15, len(df))]
     return df
 
 
@@ -330,7 +330,11 @@ def main():
                 merged_img = merge_text(title, description, merged_img)
 
                 # save the result
-                cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
+                img_path = f'{RESULTS_DIR}/{str(uuid.uuid4())}.png'
+                cv2.imwrite(img_path, merged_img)
+
+                # add the image path to the dataframe
+                data.loc[index, 'img_path'] = img_path
 
         with placeholder.container():
             for index, row in data.iterrows():
@@ -339,8 +343,9 @@ def main():
                 description = row['description']
                 time = row['time']
                 url = row['url']
+                img_path = row['img_path']
 
-                rs_img = cv2.imread(f'{RESULTS_DIR}/{index}.png')
+                rs_img = cv2.imread(img_path)
 
                 itm_content = (
                     title.upper()
