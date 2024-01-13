@@ -20,10 +20,8 @@ warnings.filterwarnings("ignore")
 
 
 def crawl_news():
-    
-    
-    if os.path.exists(SAVE_POST_IMG_DIR):
-        shutil.rmtree(SAVE_POST_IMG_DIR)
+    # if os.path.exists(SAVE_POST_IMG_DIR):
+    #     shutil.rmtree(SAVE_POST_IMG_DIR)
     os.makedirs(SAVE_POST_IMG_DIR, exist_ok=True)
 
     response = requests.get(VNEXPRESS)
@@ -36,7 +34,6 @@ def crawl_news():
         article_url = article.h2.a['href']
         list_url.append(article_url)
     list_url = list(set(list_url))
-
 
     # ---- ở trên oke
     df = pd.DataFrame(
@@ -99,7 +96,7 @@ def crawl_news():
 
     # sort and get the ten latest news
     df = df.sort_values(by=['year', 'month', 'day'], ascending=False)
-    df = df[:min(10, len(df))]
+    df = df[: min(10, len(df))]
     return df
 
 
@@ -309,9 +306,9 @@ def main():
     if generate_btn:
         placeholder.empty()
 
-        if os.path.exists(RESULTS_DIR):
-            shutil.rmtree(RESULTS_DIR)
-            os.makedirs(RESULTS_DIR, exist_ok=True)
+        # if os.path.exists(RESULTS_DIR):
+        #     shutil.rmtree(RESULTS_DIR)
+        os.makedirs(RESULTS_DIR, exist_ok=True)
 
         bgr_img_path = f"{BGR_DIR}/{background.lower().replace(' ', '')}.png"
 
@@ -334,7 +331,7 @@ def main():
 
                 # save the result
                 cv2.imwrite(f'{RESULTS_DIR}/{index}.png', merged_img)
-    
+
         with placeholder.container():
             for index, row in data.iterrows():
                 # get the title and description
