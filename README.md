@@ -2,7 +2,9 @@
 
 ## Description
 
-A small project to crawl VNEXPRESS and generate weekly news for IT Media. (Update later)
+A small project to crawl VNEXPRESS and generate weekly news for IT Media. The main idea of this project is to use BeautifulSoup to crawl the news from VNEXPRESS and OpenCV to generate the image for the news based on the title, content, image of the news and some default templates.
+
+This app is deployed on [Streamlit Community Cloud](https://share.streamlit.io/). You can access it [here](https://it-media-weekly-news-generator.streamlit.app/).
 
 ## Installation
 
@@ -11,6 +13,10 @@ If you want to run this project locally, you can clone this repository and insta
 ```bash
 # Clone the repository
 git clone https://github.com/vm7608/IT-Media-weekly-news-generator
+
+
+# Change the working directory
+cd IT-Media-weekly-news-generator
 
 # Create a virtual environment
 virtualenv .venv

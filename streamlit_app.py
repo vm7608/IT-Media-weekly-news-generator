@@ -19,26 +19,29 @@ from PIL import Image, ImageDraw, ImageFont
 warnings.filterwarnings("ignore")
 
 
-def crawl_news():
-    # if os.path.exists(SAVE_POST_IMG_DIR):
-    #     shutil.rmtree(SAVE_POST_IMG_DIR)
+def crawl_news() -> pd.DataFrame:
+    """Crawl news from vnexpress.net
+
+    Returns:
+        pd.DataFrame: Dataframe contains the crawled news
+    """
     os.makedirs(SAVE_POST_IMG_DIR, exist_ok=True)
 
     response = requests.get(VNEXPRESS)
-
     soup = BeautifulSoup(response.text, 'html.parser')
-
     articles = soup.find_all('article', class_='item-news item-news-common thumb-left')
+
     list_url = []
     for article in articles:
         article_url = article.h2.a['href']
         list_url.append(article_url)
     list_url = list(set(list_url))
 
-    # ---- ở trên oke
     df = pd.DataFrame(
         columns=['id', 'title', 'url', 'time', 'description', 'content', 'image_path']
     )
+
+    # Just crawl 15 news
     # list_url = list_url[:15]
     for url in list_url:
         try:
@@ -96,16 +99,26 @@ def crawl_news():
 
     # sort and get the ten latest news
     df = df.sort_values(by=['year', 'month', 'day'], ascending=False)
+
+    # Get only the 10 latest news
     df = df[: min(10, len(df))]
     return df
 
 
-def resize_image(img):
-    info_img_default_height = 900
-    # Get the original height and width
-    original_height, original_width = img.shape[:2]
+def resize_image(img: np.ndarray) -> np.ndarray:
+    """Resize the image to the default height
 
-    # Calculate the new width based on the desired height (300px)
+    Args:
+        img (np.ndarray): The image to resize
+
+    Returns:
+        np.ndarray: The resized image
+    """
+
+    # The default height of the info image is 900px
+    info_img_default_height = 900
+
+    original_height, original_width = img.shape[:2]
     new_width = int((info_img_default_height / original_height) * original_width)
 
     # Resize the image while keeping the aspect ratio
@@ -116,7 +129,16 @@ def resize_image(img):
     return resized_img
 
 
-def merge_info_img(template_img, info_img):
+def merge_info_img(template_img: np.ndarray, info_img: np.ndarray) -> np.ndarray:
+    """Merge the info image to the template image
+
+    Args:
+        template_img (np.ndarray): The template image
+        info_img (np.ndarray): The info image from vnexpress.net
+
+    Returns:
+        np.ndarray: The merged image
+    """
     # resize info image
     info_img = resize_image(info_img)
 
@@ -124,7 +146,8 @@ def merge_info_img(template_img, info_img):
     template_width = template_img.shape[1]
     info_width = info_img.shape[1]
 
-    # merge info image to template image start from y = 400, and make the info in the center of the template
+    # merge info image to template image start from y = 400,
+    # and make the info in the center of the template
     template_img[
         400:1300,
         int((template_width - info_width) / 2) : int((template_width + info_width) / 2),
@@ -133,7 +156,23 @@ def merge_info_img(template_img, info_img):
     return template_img
 
 
-def draw_text_with_width_limit(draw, text, x_start, x_end, y_position, font, color):
+def draw_text_with_width_limit(
+    draw, text, x_start, x_end, y_position, font, color
+) -> int:
+    """Draw text with width limit
+
+    Args:
+        draw (_type_): PIL draw object
+        text (_type_): The text to draw
+        x_start (_type_): The start x position
+        x_end (_type_): The end x position
+        y_position (_type_): The y position
+        font (_type_): The font to use
+        color (_type_): The color of the text
+
+    Returns:
+        int: The y position after drawing the text
+    """
     words = text.split()
     lines = []
     current_line = ''
@@ -161,7 +200,17 @@ def draw_text_with_width_limit(draw, text, x_start, x_end, y_position, font, col
     return y
 
 
-def merge_text(title, descripton, img):
+def merge_text(title, descripton, img) -> np.ndarray:
+    """Merge the title and description to the image
+
+    Args:
+        title (_type_): The title
+        descripton (_type_): The description
+        img (_type_): The image to merge
+
+    Returns:
+        np.ndarray: The merged image
+    """
     # convert the image to PIL format and keep the RGB format
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = Image.fromarray(img)
@@ -305,8 +354,6 @@ def main():
     if generate_btn:
         placeholder.empty()
 
-        # if os.path.exists(RESULTS_DIR):
-        #     shutil.rmtree(RESULTS_DIR)
         os.makedirs(RESULTS_DIR, exist_ok=True)
 
         bgr_img_path = f"{BGR_DIR}/{background.lower().replace(' ', '')}.png"
